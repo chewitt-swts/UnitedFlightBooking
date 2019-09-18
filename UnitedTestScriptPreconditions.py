@@ -14,7 +14,7 @@ note: try/except is redundant since we are calling functions that have it implem
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains as action
 from selenium.webdriver.support.ui import Select
-from _TestScripts import TestScripts              # import test scripts
+from UnitedTestScripts import TestScripts              # import test scripts
 import time
 import random
 
