@@ -239,12 +239,42 @@ class United_Flight_Booking:
         except Exception as err:
             print(str(err))
 
-#this method will click the Minus Button next to Seniors in the Travelers context menu. Note this method only clicks the Minus Button once; in order to deselect additional Seniors Travelers, more clicks will be needed. In other words, call this method for every single click in a test case.
+#this method will click the Minus Button next to Infants in the Travelers context menu. Note this method only clicks the Minus Button once; in order to deselect additional Infant Travelers, more clicks will be needed. In other words, call this method for every single click in a test case.
     def main_travelers_context_menu_infants_minus_button(self):
         try:
             MainTravelersContextMenuInfantsMinusButton = self.driver.find_element_by_id('NumOfInfants minusBtn')
             MainTravelersContextMenuInfantsMinusButton.click()
             print('The number of Infant Travelers has been reduced by 1 by clicking the Minus Button on the main page.')
+        except Exception as err:
+            print(str(err))
+
+    # TODO randomize selection of send_keys values for all the following Traveler Context Menu elements; input field will accept 0 - 9. Should also write a negative test case to confirm it will not accept values greater than 9. Be sure the random value is also noted in the print confirmation message and error logging.
+    #infants must have at least 1 adult or senior traveler to be a valid selection.
+    def main_travelers_context_menu_infantsonlap_input_field(self):
+        try:
+            MainTravelersContextMenuInfantsOnLapInputField = self.driver.find_element_by_id('NumOfLapInfants')
+            MainTravelersContextMenuInfantsOnLapInputField.click()
+            MainTravelersContextMenuInfantsOnLapInputField.send_keys('3')
+            print('Main Page Travelers Context Menu Infants On Lap Input Field has successfully received input to assign the number of Infant On Lap Travelers to 3.')
+        except Exception as err:
+            print(str(err))
+
+#this method will click the Plus Button next to Infants On Lap in the Travelers context menu. Note this method only clicks the Plus Button once; in order to select additional Infant On Lap Travelers, more clicks will be needed. In other words, call this method for every single click in a test case.
+    #infants must have at least 1 adult or senior traveler to be a valid selection.
+    def main_travelers_context_menu_infantsonlap_plus_button(self):
+        try:
+            MainTravelersContextMenuInfantsOnLapPlusButton = self.driver.find_element_by_id('NumOfLapInfants plusBtn')
+            MainTravelersContextMenuInfantsOnLapPlusButton.click()
+            print('The number of Infant On Lap Travelers has been increased by 1 by clicking the Plus Button on the main page.')
+        except Exception as err:
+            print(str(err))
+
+#this method will click the Minus Button next to Infants On Lap in the Travelers context menu. Note this method only clicks the Minus Button once; in order to deselect additional Infants On Lap Travelers, more clicks will be needed. In other words, call this method for every single click in a test case.
+    def main_travelers_context_menu_infantsonlap_minus_button(self):
+        try:
+            MainTravelersContextMenuInfantsOnLapMinusButton = self.driver.find_element_by_id('NumOfLapInfants minusBtn')
+            MainTravelersContextMenuInfantsOnLapMinusButton.click()
+            print('The number of Infant On Lap Travelers has been reduced by 1 by clicking the Minus Button on the main page.')
         except Exception as err:
             print(str(err))
 '''
