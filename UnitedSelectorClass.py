@@ -54,6 +54,7 @@ class United_Flight_Booking:
 
     def open_United(self):
         self.driver.get('http://www.united.com')
+        print('United.com has been loaded in an incognito Chrome Window.')
 
 #The below methods are to select the search elements contained on the United.com home page.
     #This method is to select the radio button labeled "Roundtrip" on the United.com home page.
@@ -88,12 +89,14 @@ class United_Flight_Booking:
             print('Calendar Shop Checkbox has been clicked successfully.')
         except Exception as err:
             print(str(err))
-
+#TODO create/download list of airport codes/cities and build a method to randomly select an option from this list to enter in the departing and destination airport fields.
     def departing_airport_input_field(self):
         try:
             DepartingAirportInputField = self.driver.find_element_by_id('bookFlightOriginInput')
-            DepartingAirportInputField.click()
-            print('Departing Airport Input Field has been clicked successfully.')
+            #DepartingAirportInputField.click()
+            #print('Departing Airport Input Field has been clicked successfully.')
+            #action(self.driver).move_to_element(DepartingAirportInputField).click().send_keys('ORD').perform()
+            action(self.driver).click(DepartingAirportInputField).print('Departing Airport Input Field has been clicked successfully.').send_keys('ORD').print('The following keystrokes were entered into the Departing Airport Input Field: ORD').perform()
         except Exception as err:
             print(str(err))
 
@@ -102,8 +105,11 @@ class United_Flight_Booking:
             DestinationAirportInputField = self.driver.find_element_by_id('bookFlightDestinationInput')
             DestinationAirportInputField.click()
             print('Destination Airport Input Field has been clicked successfully.')
+            DestinationAirportInputField.send_keys('LAX')
+            print('The following keystrokes were entered into the Destination Airport Input Field: LAX')
         except Exception as err:
             print(str(err))
+
 #TODO figure out how to select each element in the calendar context menu, particularly individual date selection -- and randomizing selecting a date from the menu, as opposed to hardcoding it by sending keys to the input field/dialogue box.
 
     def roundtrip_departing_date_field(self):
@@ -161,7 +167,7 @@ class United_Flight_Booking:
             print('Main Page Travelers Context Menu Clear Button has been clicked successfully.')
         except Exception as err:
             print(str(err))
-#TODO randomize selection of send_keys values for all the following Traveler Context Menu elements; input field will accept 0 - 9. Should also write a negative test case to confirm it will not accept values greater than 9. Be sure the random value is also noted in the print confirmation message and error logging.
+#TODO randomize selection of send_keys values for all the following Traveler Context Menu elements; input field will accept 0 - 9. Should also write a negative test case to confirm it will not accept values greater than 9. Be sure the random value is also noted in the print confirmation message and error logging. Note that combined total of all travelers cannot exceed 9.
     #this method is does not work when assembled in an action chain; you must click the input field element first and then give a separate command to send_keys in order to change the input value from 1(default) to 3(or randomized)
     def main_travelers_context_menu_adults_input_field(self):
         try:
@@ -190,7 +196,7 @@ class United_Flight_Booking:
         except Exception as err:
             print(str(err))
 
-    # TODO randomize selection of send_keys values for all the following Traveler Context Menu elements; input field will accept 0 - 9. Should also write a negative test case to confirm it will not accept values greater than 9. Be sure the random value is also noted in the print confirmation message and error logging.
+    # TODO randomize selection of send_keys values for all the following Traveler Context Menu elements; input field will accept 0 - 9. Should also write a negative test case to confirm it will not accept values greater than 9. Be sure the random value is also noted in the print confirmation message and error logging. Note that combined total of all travelers cannot exceed 9.
     def main_travelers_context_menu_seniors_input_field(self):
         try:
             MainTravelersContextMenuSeniorsInputField = self.driver.find_element_by_id('NumOfSeniors')
@@ -218,7 +224,7 @@ class United_Flight_Booking:
         except Exception as err:
             print(str(err))
 
-    # TODO randomize selection of send_keys values for all the following Traveler Context Menu elements; input field will accept 0 - 9. Should also write a negative test case to confirm it will not accept values greater than 9. Be sure the random value is also noted in the print confirmation message and error logging.
+    # TODO randomize selection of send_keys values for all the following Traveler Context Menu elements; input field will accept 0 - 9. Should also write a negative test case to confirm it will not accept values greater than 9. Be sure the random value is also noted in the print confirmation message and error logging. Note that combined total of all travelers cannot exceed 9.
     #infants must have at least 1 adult or senior traveler to be a valid selection.
     def main_travelers_context_menu_infants_input_field(self):
         try:
