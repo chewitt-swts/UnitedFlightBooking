@@ -1,36 +1,14 @@
-'''
-(PROJECTNAME)ItemSelectorClass Template
-
-This is a template class for accessing and selecting elements on a web page.
-
-METHOD ASSUMPTIONS:
-
-THERE IS A TRY/EXCEPT CLAUSE FOR EVERY SINGLE METHOD!! THIS IS NOT SHOWN FOR EVERY ONE
-BUT IT IS IMPLIED! A single function failure should not mean the whole class fails.
-
-Confirmation messages are also implied
-
-The methods are organized into how (I feel) they should be designed based on the element we are interacting with
-(button, select, radio button, etc.)
-'''
-
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains as action
 from selenium.webdriver.support.ui import Select
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.keys import Keys
 import time
 import random
-
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
 class United_Flight_Booking:
-    chrome_options = webdriver.ChromeOptions
-
-    driver = webdriver
-    wait = WebDriverWait
 
     def __init__(self):
         self.chrome_options = webdriver.ChromeOptions()
@@ -431,66 +409,49 @@ class United_Flight_Booking:
     def main_fare_dropdown_(self):
         try:
             #fareDropdown is the dropdown menu element. CLicking on it simply opens up the dropdown menu to display the 3 dropdown options: economy, premium economy, and business/first
-            fareDropdown = self.driver.find_element_by_id('cabinType')
-            economy = action(self.driver).send_keys(Keys.ENTER).perform()
-            premium = action(self.driver).send_keys(Keys.ARROW_DOWN).send_keys(Keys.ENTER).perform()
-            business = action(self.driver).send_keys(
-                Keys.ARROW_DOWN).send_keys(Keys.ARROW_DOWN).send_keys(Keys.ENTER).perform()
+
+            #This dropdown menu is not coded like normal dropdowns, with an index. This is a graphic element that must be clicked by a mouse or manipulated using keys. There are no easy selectors for each option in the dropdown, so simulating clicks via keystrokes to navigate the dropdown are the only option.
+
+            #If this method breaks, try adjusting the time.sleep first
+
+            wait = WebDriverWait
+
+            economy = Keys.ENTER
+            premium = Keys.ARROW_DOWN, Keys.ENTER
+            business = Keys.ARROW_DOWN, Keys.ARROW_DOWN, Keys.ENTER
+
             fareTypes = [economy, premium, business]
+
+            fareDropdown = wait(self.driver, 20).until(EC.element_to_be_clickable((By.ID, 'cabinType')))
+
             fareDropdown.click()
-            print('Fare dropdown menu has been clicked successfully.')
-            fareTypes.random.choice()
-            print('Fare type has been selected.')
+            print('Fare/Cabin Dropdown Menu has been clicked successfully.')
+
+            time.sleep(4)
+
+            action(self.driver).send_keys(random.choice(fareTypes)).perform()
+            print('Fare/Cabin type has been selected.')
+
         except Exception as err:
             print(str(err))
 
-'''
-begin _ItemSelectorClass:
 
-    define class variables here
-    ex: driver = webdriver, wait = WebDriverWait
-    
-    define initialization method(self):
-        initialize class variables
-        ex. self.driver = webdriver.Chrome(chromepath)
-    
-    define ItemSelection BUTTON method(self):
-        TRY:
-            use explicit wait to find the element
-            then click using an action chain
-            print success message
-        EXCEPT:
-            print error message
-        
-    define ItemSelection SELECT method(self, index): < index arg lets you select a choice from outside the class
-        try:
-            use explicit wait to find the element
-            select the index that is passed as an argument
-            print success message
-        except:
-            print error message
-            
-    define ItemSelection RADIO method(self, index)
-        try:
-            create an if-else statement that selects the radio button based on the index (case-switch works too, probably better)
-            i.e.
-            if index == 0
-                choose radio button option 0 (you will likely need to find this element via label)
-                explicit wait doesnt always work here, might have to use a time.sleep
-            else if index == 1
-                same thing but next label
-            else if index == 2
-                same thing but next label
-            
-            print success message
-        except:
-            print error message
-            
-    define ItemSelection INPUT method(self, text)
-        try:
-            use explicit wait to find the input element
-            use an action chain to click the element, then sendkeys "text"
-            print success message
-        except:
-            print error message
-'''
+
+    def traveler_randomizer(self):
+        travelerOptions = ['NumOfChildren01 plusBtn', 'NumOfAdults plusBtn', 'NumOfSeniors plusBtn', 'NumOfInfants plusBtn', 'NumOfLapInfants plusBtn', 'NumOfChildren04 plusBtn', 'NumOfChildren03 plusBtn', 'NumOfChildren02 plusBtn']
+        numberTravelers = random.randint(1, 8) #the total number of travelers selected
+ #
+        print(str(numberTravelers))
+        self.main_travelers_input_field()
+
+        for i in range(numberTravelers):
+            x = random.randint(0, 7)
+            print(str(x))
+            self.driver.find_element_by_id(travelerOptions[x]).click()
+            print(travelerOptions[x]+ ' was clicked.')
+
+
+
+
+
+

@@ -269,3 +269,14 @@ class United_Traveler_Menu:
             print('The number of Children 2-4 Travelers has been decreased by 1 by clicking the Minus Button on the main page.')
         except Exception as err:
             print(str(err))
+
+
+    def traveler_randomizer(self):
+        travelerOptions = [self.driver.find_element_by_id('NumOfChildren01 minusBtn')]
+        numberTravelers = random.randint(1,9)
+
+
+        for i in range(numberTravelers):
+            travelerOptions[0].click()
+
+
