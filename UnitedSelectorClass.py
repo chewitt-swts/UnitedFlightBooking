@@ -127,7 +127,9 @@ class United_Flight_Booking:
             RoundtripDepartingDateField = self.driver.find_element_by_id('DepartDate')
             RoundtripDepartingDateField.click()
             print('Roundtrip Departing Date Field has been clicked successfully.')
-            calendarDepartDate = self.driver.find_element(By.CSS_SELECTOR, ".CalendarMonthGrid_month__horizontal:nth-child(2) tr:nth-child(4) > .CalendarDay:nth-child(4)")
+                                                                                             # 2 - left month, 3 - right month | daytable row   } daytable column
+            calendarDepartDate = self.driver.find_element(By.CSS_SELECTOR, ".CalendarMonthGrid_month__horizontal:nth-child(2) tr:nth-child(1) > .CalendarDay:nth-child(4)")
+                                                                                             # even blank spaces are considered part of the table, keep this in mind.
             calendarDepartDate.click()
         except Exception as err:
             print(str(err))
@@ -137,10 +139,66 @@ class United_Flight_Booking:
             RoundtripReturnDateField = self.driver.find_element_by_id('ReturnDate')
             RoundtripReturnDateField.click()
             print('Roundtrip Return Date Field has been clicked successfully.')
-            calendarReturnDate = self.driver.find_element(By.CSS_SELECTOR, "tr:nth-child(1) > .CalendarDay:nth-child(3) .app-containers-BookCalendar-bookCalendar__pricing--16XQu")
+            calendarReturnDate = self.driver.find_element(By.CSS_SELECTOR, ".CalendarMonthGrid_month__horizontal:nth-child(3) tr:nth-child(5) > .CalendarDay:nth-child(5)")
+            calendarReturnDate.click()
         except Exception as err:
             print(str(err))
 
+    # randomly generate an october roundtrip flight
+    def roundtrip_random_date(self):
+        try:
+            # generate departure dates
+            DepartCol = random.randint(1, 7) # generate a random column int, max possible
+            DepartRow = random.randint(1, 5) # generate a random row int, max possible
+
+            # adjust random ints so they aren't correlated to blank spaces
+            if DepartRow is 1 and DepartCol < 3:
+                DepartCol = 3  # set DepartCol to the earliest possible date
+
+            if DepartRow is 5 and DepartCol > 5:
+                DepartCol = 5  # set DepartRow to latest possible date
+
+            # declare here so it can be used outside of if-else scope
+            ReturnCol = 0
+            # generate return dates
+            ReturnRow = random.randint(DepartRow, 5) # must be on the same row as depart date or later
+            if DepartRow is ReturnRow:
+                ReturnCol = random.randint(DepartCol + 1, 7) # must be on the same if returning on same col
+            elif DepartCol is not ReturnCol:
+                ReturnCol = random.randint(1, 7)
+
+            # adjust random ints so they aren't correlated to blank spaces
+            if ReturnRow is 1 and ReturnCol < 3:
+                ReturnCol = 3  # set DepartCol to the earliest possible date
+
+            if ReturnRow is 5 and ReturnCol > 5:
+                ReturnCol = 5  # set DepartRow to latest possible date
+
+            RoundtripDepartingDateField = self.driver.find_element_by_id('DepartDate')
+            RoundtripDepartingDateField.click()
+            print('Roundtrip Departing Date Field has been clicked successfully.')
+
+            calendarDepartDate = self.driver.find_element(By.CSS_SELECTOR,
+                                                          ".CalendarMonthGrid_month__horizontal:nth-child(2) tr:nth-child("
+                                                          + str(DepartRow)
+                                                          + ") > .CalendarDay:nth-child("
+                                                          + str(DepartCol)
+                                                          + ")")
+            calendarDepartDate.click()
+
+            RoundtripReturnDateField = self.driver.find_element_by_id('ReturnDate')
+            RoundtripReturnDateField.click()
+            print('Roundtrip Return Date Field has been clicked successfully.')
+            calendarReturnDate = self.driver.find_element(By.CSS_SELECTOR,
+                                                          ".CalendarMonthGrid_month__horizontal:nth-child(2) tr:nth-child("
+                                                          + str(ReturnRow)
+                                                          + ") > .CalendarDay:nth-child("
+                                                          + str(ReturnCol)
+                                                          + ")")
+            calendarReturnDate.click()
+
+        except Exception as err:
+            print(str(err))
     def roundtrip_calendar_left_scroll_button(self):
         try:
             CalendarLeftScrollButton = self.driver.find_element_by_xpath("//button[@aria-label='Move backward to switch to the previous month.']")
@@ -448,7 +506,7 @@ class United_Flight_Booking:
             x = random.randint(0, 7)
             print(str(x))
             self.driver.find_element_by_id(travelerOptions[x]).click()
-            print(travelerOptions[x]+ ' was clicked.')
+            print(travelerOptions[x] + ' was clicked.')
 
 
 

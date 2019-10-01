@@ -6,7 +6,7 @@ Test = United_Flight_Booking()
 """#Test Series 1: Testing that all elements on United.com's main page flight search can be selected and values can be entered/manipulated
 """
 Test.open_United()
-Test.traveler_randomizer()
+Test.roundtrip_random_date()
 
 """Test.open_United() #begins test by opening website
 time.sleep(2)
