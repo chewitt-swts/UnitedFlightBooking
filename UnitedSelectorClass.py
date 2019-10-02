@@ -6,7 +6,7 @@ from selenium.webdriver.common.keys import Keys
 import time
 import random
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support.ui import WebDriverWait as wait
 
 class United_Flight_Booking:
 
@@ -14,8 +14,6 @@ class United_Flight_Booking:
         self.chrome_options = webdriver.ChromeOptions()
         self.chrome_options.add_argument('-incognito')
         self.driver = webdriver.Chrome(r"C:\drivers\chromedriver.exe", options=self.chrome_options)
-        self.wait = WebDriverWait(self.driver, 10)
-        self.driver.implicitly_wait(5)
 
     def loadtime(self):
         navigationStart = self.driver.execute_script("return window.performance.timing.navigationStart")
@@ -53,7 +51,8 @@ class United_Flight_Booking:
         self.driver.get('http://www.united.com')
         print('United.com has been loaded in an incognito Chrome Window.')
 
-#The below methods are to select the search elements contained on the United.com home page.
+#The following selectors are for all elements on the United.com main page search widget.
+
     #This method is to select the radio button labeled "Roundtrip" on the United.com home page.
     def roundtrip_radio_button(self):
         try:
@@ -509,7 +508,50 @@ class United_Flight_Booking:
             print(travelerOptions[x] + ' was clicked.')
 
 
+    def main_find_flights_button(self):
+        findFlightsButton = self.driver.find_element_by_xpath('//button[@aria-label="Find flights"]')
+        findFlightsButton.click()
 
+    def main_advanced_search_button(self):
+        advancedSearchButton = self.driver.find_element_by_xpath('//span[contains(text(), "Advanced search")]')
+        advancedSearchButton.click()
 
+    def changed_bag_rules(self):
+        changedBagRulesLink = self.driver.find_element_by_xpath('//span[contains(text(), "Changed bag rules")]')
+        changedBagRulesLink.click()
 
+    def optional_services_link(self):
+        optionalServicesLink = self.driver.find_element_by_xpath('//span[contains(text(), "optional services")]')
+        optionalServicesLink.click()
 
+#The following are selectors for the United Advanced Search page
+
+    #This method allows you to click on the Recent Searches dropdown menu, which appears on the Advanced Search page.
+    def recent_searches(self):
+        recentSearchDropdown = wait(self.driver, 10).until(EC.element_to_be_clickable((By.ID, 'recentSearch-text')))
+        recentSearchDropdown.click()
+
+    #This method allows you to click on the No button in the "Do you want to book a MileagePlus award ticket?" section on the Advanced Search page. The No button is selected by default when the page loads.
+    def mileage_plus_no_button(self):
+        mileageNoButton = wait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//label[@for="RedeemMiles_noRMiles"]')))
+        mileageNoButton.click()
+
+    # This method allows you to click on the Yes button in the "Do you want to book a MileagePlus award ticket?" section on the Advanced Search page. The No button is selected by default when the page loads.
+    def mileage_plus_yes_button(self):
+        mileageYesButton = wait(self.driver, 10).until(EC.element_to_be_clickable((By.XPATH, '//label[@for="RedeemMiles_rMiles"]')))
+        mileageYesButton.click()
+
+    #This method will allow you to select the One-way button under the "Trip type" section on the Advanced Search page. Roundtrip is selected by default.
+    def oneway_button_advanced_search(self):
+        onewayButtonAdvanced = wait(self.driver, 10).until(EC.element_to_be_clickable((By.ID, 'TripTypes_ow')))
+        onewayButtonAdvanced.click()
+
+    #This method will allow you to select the Roundtrip button under the "Trip type" section on the Advanced Search page. Roundtrip is selected by default.
+    def roundtrip_button_advanced_search(self):
+        roundtripButtonAdvanced = wait(self.driver, 10).until(EC.element_to_be_clickable((By.ID, 'TripTypes_rt')))
+        roundtripButtonAdvanced.click()
+
+    #This method will allow you to select the Multi-City button under the "Trip type" section on the Advanced Search page. Roundtrip is selected by default.
+    def multicity_button_advanced_search(self):
+        multicityButtonAdvanced = wait(self.driver, 10).until(EC.element_to_be_clickable((By.ID, 'TripTypes_rt')))
+        multicityButtonAdvanced.click()
