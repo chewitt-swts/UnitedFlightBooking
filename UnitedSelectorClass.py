@@ -145,44 +145,25 @@ class United_Flight_Booking:
             print(str(err))
 
     # randomly generate an october roundtrip flight
+    #TODO try to see if click intercepts happen at blank spaces. can use this to select days.
+
     def roundtrip_random_date(self):
         try:
-            # generate departure dates
-            DepartCol = random.randint(1, 7) # generate a random column int, max possible
-            DepartRow = random.randint(1, 5) # generate a random row int, max possible
-
-            # adjust random ints so they aren't correlated to blank spaces
-            if DepartRow is 1 and DepartCol < 3:
-                DepartCol = 3  # set DepartCol to the earliest possible date
-
-            if DepartRow is 5 and DepartCol > 5:
-                DepartCol = 5  # set DepartRow to latest possible date
-
-            # declare here so it can be used outside of if-else scope
-            ReturnCol = 0
-            # generate return dates
-            ReturnRow = random.randint(DepartRow, 5) # must be on the same row as depart date or later
-            if DepartRow is ReturnRow:
-                ReturnCol = random.randint(DepartCol + 1, 7) # must be on the same if returning on same col
-            elif DepartCol is not ReturnCol:
-                ReturnCol = random.randint(1, 7)
-
-            # adjust random ints so they aren't correlated to blank spaces
-            if ReturnRow is 1 and ReturnCol < 3:
-                ReturnCol = 3  # set DepartCol to the earliest possible date
-
-            if ReturnRow is 5 and ReturnCol > 5:
-                ReturnCol = 5  # set DepartRow to latest possible date
+            calendar_list = self.calendar_format(3, 5, 5)
 
             RoundtripDepartingDateField = self.driver.find_element_by_id('DepartDate')
             RoundtripDepartingDateField.click()
             print('Roundtrip Departing Date Field has been clicked successfully.')
 
+            # index 0 - month on left, index 1 - month on right
+            calendar_elements = self.driver.find_elements_by_xpath("*//div//table//tbody//tr")
+
+            print(calendar_elements)
             calendarDepartDate = self.driver.find_element(By.CSS_SELECTOR,
                                                           ".CalendarMonthGrid_month__horizontal:nth-child(2) tr:nth-child("
-                                                          + str(DepartRow)
+                                                          + str(calendar_list[0])
                                                           + ") > .CalendarDay:nth-child("
-                                                          + str(DepartCol)
+                                                          + str(calendar_list[1])
                                                           + ")")
             calendarDepartDate.click()
 
@@ -191,12 +172,61 @@ class United_Flight_Booking:
             print('Roundtrip Return Date Field has been clicked successfully.')
             calendarReturnDate = self.driver.find_element(By.CSS_SELECTOR,
                                                           ".CalendarMonthGrid_month__horizontal:nth-child(2) tr:nth-child("
-                                                          + str(ReturnRow)
+                                                          + str(calendar_list[2])
                                                           + ") > .CalendarDay:nth-child("
-                                                          + str(ReturnCol)
+                                                          + str(calendar_list[3])
                                                           + ")")
             calendarReturnDate.click()
 
+        except Exception as err:
+            print(str(err))
+
+        # randomly generate an october roundtrip flight
+
+    def calendar_format(self, start_col, end_col, max_row):
+        try:
+            # generate departure dates
+            DepartCol = random.randint(1, 7)  # generate a random column int, max possible
+            DepartRow = random.randint(1, max_row)  # generate a random row int, max possible
+
+            print("DepartCol:\t" + str(DepartCol))
+            print("DepartRow:\t" + str(DepartRow))
+            # adjust random ints so they aren't correlated to blank spaces
+            if DepartRow is 1 and DepartCol < start_col:
+                print(str(DepartCol) + "<" + str(start_col))
+                DepartCol = start_col  # set DepartCol to the earliest possible date
+
+            if DepartRow is 5 and DepartCol > end_col:
+                print(str(DepartCol) + ">" + str(end_col))
+                DepartCol = end_col  # set DepartCol to latest possible date
+
+            print("DepartCol:\t" + str(DepartCol))
+            # declare here so it can be used outside of if-else scope
+            ReturnCol = 0
+            # generate return dates
+            ReturnRow = random.randint(DepartRow, max_row)  # must be on the same row as depart date or later
+            print("Return Row:\t" + str(ReturnRow))
+            if DepartRow is ReturnRow:
+                ReturnCol = random.randint(DepartCol, 7)  # must be a later date if on the same row
+                print("ReturnCol:\t" + str(ReturnCol))
+            elif DepartRow is not ReturnRow:
+                ReturnCol = random.randint(1, 7)
+                print("ReturnCol:\t" + str(ReturnCol))
+
+            # adjust random ints so they aren't correlated to blank spaces
+            if ReturnRow is 1 and ReturnCol < start_col:
+                print(str(ReturnCol) + "<" + str(start_col))
+
+                ReturnCol = start_col  # set DepartCol to the earliest possible date
+
+            if ReturnRow is 5 and ReturnCol > end_col:
+                print(str(ReturnCol) + ">" + str(start_col))
+                ReturnCol = end_col  # set DepartRow to latest possible date
+
+            cal_list = [DepartRow, DepartCol, ReturnRow, ReturnCol]
+
+            print(cal_list)
+            return cal_list
         except Exception as err:
             print(str(err))
     def roundtrip_calendar_left_scroll_button(self):
